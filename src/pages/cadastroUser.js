@@ -209,7 +209,7 @@ export default class IconTextboxExample extends Component {
                 return (
                   <Item
                     key={item._id}>
-                    <Button transparent onPress={() => { this.select.atual = item, this.setState({ sexo: item.nome }) }} light={this.select.atual != item}>
+                    <Button transparent onPress={() => { this.select.atual = item, this.setState({ sexo: item.nome }) }} dark={this.select.atual != item}>
                       <Icon name='ios-checkmark-circle' />
                       <Text>{item.nome}</Text>
                     </Button>

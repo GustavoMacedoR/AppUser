@@ -110,7 +110,7 @@ export default {
   brandSuccess: "#5cb85c",
   brandDanger: "#d9534f",
   brandWarning: "#f0ad4e",
-  brandDark: "#000",
+  brandDark: "#9C9C9C",
   brandLight: "#f4f4f4",
 
   //Container
@@ -241,7 +241,7 @@ export default {
 
   // Text
   textColor: "#000",
-  inverseTextColor: "#B5B5B5",
+  inverseTextColor: "#9C9C9C",
   noteFontSize: 14,
   get defaultTextColor() {
     return this.textColor;

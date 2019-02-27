@@ -17,6 +17,8 @@ import {
     FooterTab,
     Fab,
     View,
+    ListItem,
+    List,
 } from 'native-base';
 import axios from "../axios";
 import fonts from "../styles/fonts"
@@ -259,7 +261,7 @@ export default class FloatingLabelExample extends Component {
                 } else {
                     alert('O atleta' + response.data[0].nome + ' já é integrante de outro grupo, ou tem um pedido em aberto!')
                 }
-            }else{
+            } else {
                 alert('Nenhum atleta com esse CPF foi encontrado!')
             }
         }).catch(error => {
@@ -319,92 +321,100 @@ export default class FloatingLabelExample extends Component {
                 </Header>
                 <Content>
 
-                    <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ margin: 20, fontSize: fonts.bigger, fontWeight: 'bold' }}>{this.state.listUser[0].nome}</Text>
-                        <Text style={{ marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'Idade: ' + (anoA - idade)}</Text>
-                        <Text style={{ marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'CPF: ' + cpfFormat}</Text>
-                        <Text style={{ marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'Sexo: ' + this.state.listUser[0].sexo}</Text>
-                        {this.state.listUser[0].grupo == 0 &&
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ flex: 1, marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'Grupo: '}</Text>
-                                <Text note style={{ flex: 6 }}>{' Você ainda não possui um grupo de treinamento, fale com um adiministrador ou crie seu próprio Grupo!'}</Text>
-                            </View>
-                        }
+                    <View style={{}}>
+                        <View style={{ backgroundColor: 'white' }}>
+                            <Text style={{ margin: 20, fontSize: fonts.bigger, fontWeight: 'bold' }}>{this.state.listUser[0].nome}</Text>
+                            <Text style={{ marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'Idade: ' + (anoA - idade)}</Text>
+                            <Text style={{ marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'CPF: ' + cpfFormat}</Text>
+                            <Text style={{ marginLeft: 20, fontSize: fonts.big, fontWeight: 'normal' }}>{'Sexo: ' + this.state.listUser[0].sexo}</Text>
+                            {this.state.listUser[0].grupo == 0 &&
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ flex: 1, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'Grupo: '}</Text>
+                                    <Text note style={{ flex: 6 }}>{' Você ainda não possui um grupo de treinamento, fale com um adiministrador ou crie seu próprio Grupo!'}</Text>
+                                </View>
+                            }
+                            {this.state.listUser[0].grupo != 0 &&
+                                <List>
+                                    <List style={{ flexDirection: 'row', backgroundColor: 'white', marginLeft: 20 }}>
+                                        <Text style={{ flex: 1, fontSize: fonts.big, fontWeight: 'normal' }}>{'Grupo: '}</Text>
+                                        {this.state.listGroup[0] != undefined && <Text style={{ flex: 6, fontSize: fonts.big, fontWeight: 'bold' }}>{this.state.listGroup[0].nome_grupo}</Text>}
+                                    </List>
+                                    <Button onPress={() => { this.sairGroup() }} transparent style={{ height: 30, margin: 10, alignSelf: 'flex-end' }}><Text style={{ color: 'red', fontWeight: 'bold' }}>Sair do Grupo</Text></Button>
+                                </List>
+                            }
+                        </View>
 
                         {this.state.listUser[0].grupo != 0 &&
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ flex: 1, marginLeft: 20, marginBottom: 10, fontSize: fonts.big, fontWeight: 'normal' }}>{'Grupo: '}</Text>
-                                    {this.state.listGroup[0] != undefined && <Text style={{ flex: 6, fontSize: fonts.big, fontWeight: 'bold' }}>{this.state.listGroup[0].nome_grupo}</Text>}
-                                </View>
-                                <Button onPress={() => { this.sairGroup() }} transparent><Text style={{ color: 'red', fontWeight: 'bold' }}>Sair do Grupo</Text></Button>
 
                                 {this.state.listGroup[0] != undefined && this.state.listUser[0].admin == '1' &&
                                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 15 }}>
-                                        
-                                        <Text style={{ marginBottom:20 ,fontSize: fonts.bigger, fontWeight: 'bold' }}>Buscar e adicionar integrantes!</Text>
-                                        
-                                        <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+
+                                        <View style={{ flexDirection: 'row', margin: 8, backgroundColor: 'white' }}>
                                             <Item style={{ flex: 3, marginLeft: 10 }}>
-                                                <Icon name="ios-search" />
                                                 <Input clearButtonMode='always' keyboardType='numeric' maxLength={11} onChangeText={(text) => this.setState({ busca: text })} value={this.state.busca} placeholder="Buscar um Atleta pelo CPF" />
-                                                <Icon name="ios-people" />
                                             </Item>
-                                            <Button onPress={() => { this.buscarUser(), this.setState({ busca: "" }) }} style={{ marginLeft:5, marginRight:5 }} >
-                                                <Text>Buscar</Text>
+                                            <Button onPress={() => { this.buscarUser(), this.setState({ busca: "" }) }} full style={{ backgroundColor: '#E8E8E8', height: 50 }} >
+                                                <Icon name="ios-search" />
                                             </Button>
                                         </View>
 
-                                        <Text style={{ fontSize: fonts.bigger, fontWeight: 'bold', marginBottom: 20 }}>Integrantes do Grupo.</Text>
+                                        <Text style={{ fontSize: fonts.big, fontWeight: 'bold', marginLeft: 8, marginTop: 20, marginBottom: 5, alignSelf: 'flex-start', color: '#696969' }}>Integrantes do Grupo</Text>
 
-                                        {this.state.groupUsers.map(function (item, index) {
-                                            if (item.id != idAtleta) {
+                                        <View style={{ backgroundColor: 'white', margin: 8 }}>
+
+                                            {this.state.groupUsers.map(function (item, index) {
+                                                if (item.id != idAtleta) {
+                                                    return (
+
+                                                        <Button onLongPress={() => addAdmin(item)} key={index} style={{ marginBottom: 2, backgroundColor: 'white' }}>
+                                                            <Left style={{ flex: 3 }}>
+                                                                <Text style={{ marginLeft: 5 }} >{item.nome}</Text>
+                                                            </Left>
+                                                            <Body style={{ flex: 3, flexDirection: 'row-reverse' }}>
+                                                                {item.admin == 1 &&
+                                                                    <Text style={{ textAlign: 'center', color: 'green', fontSize: 14 }} >Admin</Text>
+                                                                }
+                                                                {item.pedido == 1 &&
+                                                                    <Text style={{ textAlign: 'center', color: 'gray', fontSize: 14, marginRight: 5 }} >Pedido</Text>
+                                                                }
+                                                            </Body>
+                                                            <Right style={{ flexDirection: 'row' }}>
+                                                                <Button style={{ alignContent: 'flex-end' }} onPress={() => { removerGroup(item.id) }} transparent><Icon name='close' style={{ color: 'red' }} /></Button>
+                                                            </Right>
+                                                        </Button>
+
+                                                    )
+                                                }
+                                            })}
+                                        </View>
+
+                                        <Text style={{ fontSize: fonts.big, fontWeight: 'bold', marginLeft: 8, marginTop: 20, marginBottom: 5, alignSelf: 'flex-start', color: '#696969' }}>Treinos Do Grupo</Text>
+
+                                        <View style={{ backgroundColor: 'white', margin: 8 }}>
+
+                                            {this.state.treinos.map(function (item, index) {
                                                 return (
-                                                    <Button onLongPress={() => addAdmin(item)} block light key={index} style={{ marginStart: 5, marginLeft: 5, marginRight: 5 }}>
+                                                    <Button key={index} style={{ backgroundColor: 'white', marginBottom: 2 }}>
+
                                                         <Left style={{ flex: 3 }}>
-                                                            <Text style={{ marginLeft: 5 }} >{item.nome}</Text>
+                                                            <Text style={{ marginLeft: 5 }} >{item.NomeCorrida}</Text>
                                                         </Left>
-                                                        <Body style={{ flex: 3, flexDirection: 'row-reverse' }}>
-                                                            {item.admin == 1 &&
-                                                                <Text style={{ textAlign: 'center', color: 'green', fontSize: 14, borderWidth: 1, borderColor: 'green' }} >Admin</Text>
-                                                            }
-                                                            {item.pedido == 1 &&
-                                                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: 14, borderWidth: 1, borderColor: 'gray', marginRight: 5 }} >Pedido</Text>
-                                                            }
-                                                        </Body>
-                                                        <Right style={{ flexDirection: 'row' }}>
-                                                            <Button style={{ alignContent: 'flex-end' }} onPress={() => { removerGroup(item.id) }} transparent><Icon name='close-circle' style={{ color: 'red' }} /></Button>
+                                                        <Right style={{ marginRight: 8, flexDirection:'row' }}>
+                                                            <Button style={{}} onPress={() => { navigate('cadastroGrupo', { id: item }) }} transparent><Icon name='build' style={{ color: 'blue' }} /></Button>
+                                                            <Button style={{}} onPress={() => { removerTreino(item.id) }} transparent><Icon name='close' style={{ color: 'red' }} /></Button>
                                                         </Right>
                                                     </Button>
                                                 )
-                                            }
-                                        })}
-                                        <View style={{ flexDirection: 'row', marginBottom: 20, marginTop: 20 }}>
-                                            <Text style={{ fontSize: fonts.bigger, fontWeight: 'bold', alignSelf: 'center' }}>Treinos Do Grupo</Text>
+                                            })}
+
                                             <Button
-                                                rounded
-                                                style={{ backgroundColor: '#5067FF', marginLeft: 10, alignSelf: 'center' }}
+                                                block
+                                                style={{ backgroundColor: 'white' }}
                                                 onPress={() => this.props.navigation.navigate('cadastroGrupo', { idG: this.state.listGroup[0].id })}>
-                                                <Icon name="md-add" />
+                                                <Text style={{ color: '#696969' }}>Adicionar um treino</Text>
                                             </Button>
                                         </View>
-
-                                        {this.state.treinos.map(function (item, index) {
-                                            return (
-                                                <Button block light key={index} style={{ marginStart: 5, marginLeft: 5, marginRight: 5 }}>
-
-                                                    <Left style={{ flex: 5 }}>
-                                                        <Text style={{ marginLeft: 5 }} >{item.NomeCorrida}</Text>
-                                                    </Left>
-                                                    <Body>
-                                                        <Button style={{ alignContent: 'flex-end' }} onPress={() => { navigate('cadastroGrupo', { id: item }) }} transparent><Icon name='settings' style={{ color: 'blue' }} /></Button>
-                                                    </Body>
-                                                    <Right style={{ flexDirection: 'row' }}>
-                                                        <Button style={{ alignContent: 'flex-end' }} onPress={() => { removerTreino(item.id) }} transparent><Icon name='close-circle' style={{ color: 'red' }} /></Button>
-                                                    </Right>
-                                                </Button>
-                                            )
-                                        })}
 
                                     </View>
                                 }
